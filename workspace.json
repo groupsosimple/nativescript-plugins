@@ -73,7 +73,7 @@
 					"builder": "@nrwl/workspace:run-commands",
 					"outputs": ["dist/packages"],
 					"options": {
-						"commands": [],
+						"commands": ["nx run nativescript-pubnub:build.all"],
 						"parallel": false
 					}
 				},
@@ -82,6 +82,49 @@
 					"outputs": ["dist/packages"],
 					"options": {
 						"commands": ["nx g @nativescript/plugin-tools:focus-packages"],
+						"parallel": false
+					}
+				}
+			}
+		},
+		"nativescript-pubnub": {
+			"root": "packages/nativescript-pubnub",
+			"sourceRoot": "packages/nativescript-pubnub",
+			"projectType": "library",
+			"schematics": {},
+			"architect": {
+				"build": {
+					"builder": "@nrwl/node:package",
+					"options": {
+						"outputPath": "dist/packages/nativescript-pubnub",
+						"tsConfig": "packages/nativescript-pubnub/tsconfig.json",
+						"packageJson": "packages/nativescript-pubnub/package.json",
+						"main": "packages/nativescript-pubnub/index.ts",
+						"assets": [
+							"packages/nativescript-pubnub/*.md",
+							"packages/nativescript-pubnub/index.d.ts",
+							"LICENSE",
+							{
+								"glob": "**/*",
+								"input": "packages/nativescript-pubnub/platforms/",
+								"output": "./platforms/"
+							}
+						]
+					}
+				},
+				"build.all": {
+					"builder": "@nrwl/workspace:run-commands",
+					"outputs": ["dist/packages"],
+					"options": {
+						"commands": ["nx run nativescript-pubnub:build", "node tools/scripts/build-finish.ts nativescript-pubnub"],
+						"parallel": false
+					}
+				},
+				"focus": {
+					"builder": "@nrwl/workspace:run-commands",
+					"outputs": ["dist/packages"],
+					"options": {
+						"commands": ["nx g @nativescript/plugin-tools:focus-packages nativescript-pubnub"],
 						"parallel": false
 					}
 				}

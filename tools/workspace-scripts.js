@@ -63,6 +63,13 @@ module.exports = {
 		// packages
 		// build output is always in dist/packages
 		'@groupsosimple': {
+			// @groupsosimple/nativescript-pubnub
+			'nativescript-pubnub': {
+				build: {
+					script: 'nx run nativescript-pubnub:build.all',
+					description: '@groupsosimple/nativescript-pubnub: Build',
+				},
+			},
 			'build-all': {
 				script: 'nx run all:build',
 				description: 'Build all packages',
@@ -73,6 +80,10 @@ module.exports = {
 			description: '_____________  Focus (VS Code supported)  _____________',
 		},
 		focus: {
+			'nativescript-pubnub': {
+				script: 'nx run nativescript-pubnub:focus',
+				description: 'Focus on @groupsosimple/nativescript-pubnub',
+			},
 			reset: {
 				script: 'nx run all:focus',
 				description: 'Reset Focus',

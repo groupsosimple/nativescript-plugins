@@ -22,6 +22,9 @@
 		},
 		"all": {
 			"tags": []
+		},
+		"nativescript-pubnub": {
+			"tags": []
 		}
 	},
 	"workspaceLayout": {

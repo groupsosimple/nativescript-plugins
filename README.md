@@ -5,7 +5,7 @@ npm run setup
 npm start
 ```
 
-- @groupsosimple
+- @groupsosimple/nativescript-pubnub
 
 # How to use?
 
