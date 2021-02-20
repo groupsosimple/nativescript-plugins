@@ -3,6 +3,7 @@
 	<ScrollView class="h-full">
 		<StackLayout>
 			<Button text="Send Message" (tap)="demoShared.testIt()" class="btn btn-primary"></Button>
+			<Label [text]="demoShared.messages.get('received')" textWrap="True"></Label>
 		</StackLayout>
 	</ScrollView>
 </StackLayout>

@@ -7,6 +7,7 @@
         <ScrollView class="h-full">
           <StackLayout>
             <Button text="Send Message" tap="{{ testIt }}" class="btn btn-primary"/>
+            <Label text="{{ messages.received }}" textWrap="True"/>
           </StackLayout>
         </ScrollView>
     </StackLayout>

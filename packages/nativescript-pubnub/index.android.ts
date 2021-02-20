@@ -1,7 +1,7 @@
 import { PubNubApi, PNConfiguration, PNEventListener, PNStatus } from './common';
 
 function convertPNStatusToJson(pubnub: com.pubnub.api.PubNub, status: com.pubnub.api.models.consumer.PNStatus) {
-	return JSON.parse(
+	let json = JSON.parse(
 		pubnub.getMapper().toJson(
 			status
 				.toBuilder()
@@ -10,6 +10,8 @@ function convertPNStatusToJson(pubnub: com.pubnub.api.PubNub, status: com.pubnub
 				.build()
 		)
 	);
+	json['clientRequest'] = null;
+	return json;
 }
 
 @NativeClass
