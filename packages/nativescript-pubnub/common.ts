@@ -58,25 +58,25 @@ export interface PNConfiguration {
 	// proxy?: java.net.Proxy
 
 	/** iOS only atribute */
-	TLSEnabled: boolean;
+	TLSEnabled?: boolean;
 	/** iOS only atribute */
-	applicationExtensionSharedGroupIdentifier: string;
+	applicationExtensionSharedGroupIdentifier?: string;
 	/** iOS only atribute */
-	catchUpOnSubscriptionRestore: boolean;
+	catchUpOnSubscriptionRestore?: boolean;
 	/** iOS only atribute */
-	completeRequestsBeforeSuspension: boolean;
+	completeRequestsBeforeSuspension?: boolean;
 	/** iOS only atribute */
-	keepTimeTokenOnListChange: boolean;
+	keepTimeTokenOnListChange?: boolean;
 	/** iOS only atribute */
-	managePresenceListManually: boolean;
+	managePresenceListManually?: boolean;
 	/** iOS only atribute */
-	presenceHeartbeatInterval: number;
+	presenceHeartbeatInterval?: number;
 	/** iOS only atribute */
-	presenceHeartbeatValue: number;
+	presenceHeartbeatValue?: number;
 	/** iOS only atribute */
-	restoreSubscription: boolean;
+	restoreSubscription?: boolean;
 	/** iOS only atribute */
-	stripMobilePayload: boolean;
+	stripMobilePayload?: boolean;
 	/** iOS only atribute */
 	// TODO: Add iOS natives classes
 	//heartbeatNotificationOptions: PNHeartbeatNotificationOptions,
@@ -144,14 +144,13 @@ export interface PNEventListener {
 	file(event): void;
 }
 
-export interface PNPublishResponse {}
-
-export interface PubNubApi {
+export interface PubNubNSApi {
 	subscribe(channels: string[], withPresence: boolean): void;
 	subscribeToChannelGroups(groups: string[], withPresence: boolean): void;
 	unsubscribe(channels: string[]): void;
 	unsubscribeFromAll(): void;
 	unsubscribeFromChannelGroups(groups: string[]): void;
-	publish(channel: string, message: Object, responseListener: (result: PNPublishResponse, status: PNStatus) => void): void;
+	publish(channel: string, message: Object, responseListener: (status: PNStatus) => void): void;
 	addEventListener(event: PNEventListener): void;
+	destroy(): void;
 }

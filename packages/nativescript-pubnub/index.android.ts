@@ -1,4 +1,4 @@
-import { PubNubApi, PNConfiguration, PNEventListener, PNStatus, PNPublishResponse } from './common';
+import { PubNubNSApi, PNConfiguration as PNConfigurationNS, PNEventListener as PNEventListenerNS, PNStatus as PNStatusNS } from './common';
 
 function convertPNStatusToJson(pubnub: com.pubnub.api.PubNub, status: com.pubnub.api.models.consumer.PNStatus) {
 	return JSON.parse(
@@ -14,7 +14,7 @@ function convertPNStatusToJson(pubnub: com.pubnub.api.PubNub, status: com.pubnub
 
 @NativeClass
 class SubscribeCallbackImpl extends com.pubnub.api.callbacks.SubscribeCallback {
-	constructor(private eventListener: PNEventListener) {
+	constructor(private eventListener: PNEventListenerNS) {
 		super();
 		return global.__native(this);
 	}
@@ -47,11 +47,11 @@ class SubscribeCallbackImpl extends com.pubnub.api.callbacks.SubscribeCallback {
 	}
 }
 
-export class PubNub implements PubNubApi {
+export class PubNubNS implements PubNubNSApi {
 	_config: com.pubnub.api.PNConfiguration;
 	_client: com.pubnub.api.PubNub;
 
-	constructor(config: PNConfiguration) {
+	constructor(config: PNConfigurationNS) {
 		// initialize the native config class
 		this.initializeConfiguration(config);
 
@@ -60,45 +60,45 @@ export class PubNub implements PubNubApi {
 	}
 
 	subscribe(channels: string[], withPresence: boolean) {
-		let subsBuilder_ = this._client.subscribe().channels(java.util.Arrays.asList(channels));
-		subsBuilder_ = withPresence ? subsBuilder_.withPresence() : subsBuilder_;
-		subsBuilder_.execute();
+		let subsBuilder_ = this._client?.subscribe().channels(java.util.Arrays.asList(channels));
+		subsBuilder_ = withPresence ? subsBuilder_?.withPresence() : subsBuilder_;
+		subsBuilder_?.execute();
 	}
 
-	addEventListener(eventListener: PNEventListener) {
-		this._client.addListener(new SubscribeCallbackImpl(eventListener));
+	addEventListener(eventListener: PNEventListenerNS) {
+		this._client?.addListener(new SubscribeCallbackImpl(eventListener));
 	}
 
-	publish(channel: string, message: Object, responseListener: (result: PNPublishResponse, status: PNStatus) => void) {
+	publish(channel: string, message: Object, responseListener: (rstatus: PNStatusNS) => void) {
 		let pubnub = this._client;
 		this._client
-			.publish()
-			.message(pubnub.getMapper().fromJson(JSON.stringify({ message: message }), org.json.JSONObject.class))
+			?.publish()
+			.message(pubnub.getMapper().fromJson(JSON.stringify(message), java.lang.Object.class))
 			.channel(channel)
 			.async(
 				new com.pubnub.api.callbacks.PNCallback<com.pubnub.api.models.consumer.PNPublishResult>({
 					onResponse: function (result: com.pubnub.api.models.consumer.PNPublishResult, status: com.pubnub.api.models.consumer.PNStatus) {
-						responseListener(JSON.parse(pubnub.getMapper().toJson(result)), convertPNStatusToJson(pubnub, status));
+						responseListener(convertPNStatusToJson(pubnub, status));
 					},
 				})
 			);
 	}
 	subscribeToChannelGroups(groups: string[], withPresence: boolean) {
-		let subsBuilder_ = this._client.subscribe().channelGroups(java.util.Arrays.asList(groups));
-		subsBuilder_ = withPresence ? subsBuilder_.withPresence() : subsBuilder_;
-		subsBuilder_.execute();
+		let subsBuilder_ = this._client?.subscribe().channelGroups(java.util.Arrays.asList(groups));
+		subsBuilder_ = withPresence ? subsBuilder_?.withPresence() : subsBuilder_;
+		subsBuilder_?.execute();
 	}
 	unsubscribe(channels: string[]) {
-		this._client.unsubscribe().channels(java.util.Arrays.asList(channels)).execute();
+		this._client?.unsubscribe().channels(java.util.Arrays.asList(channels)).execute();
 	}
 	unsubscribeFromAll() {
-		this._client.unsubscribeAll();
+		this._client?.unsubscribeAll();
 	}
 	unsubscribeFromChannelGroups(groups: string[]) {
-		this._client.unsubscribe().channelGroups(java.util.Arrays.asList(groups)).execute();
+		this._client?.unsubscribe().channelGroups(java.util.Arrays.asList(groups)).execute();
 	}
 
-	initializeConfiguration(config: PNConfiguration) {
+	initializeConfiguration(config: PNConfigurationNS) {
 		this._config = new com.pubnub.api.PNConfiguration();
 
 		if (config.uuid) this._config.setUuid(config.uuid);
@@ -139,5 +139,9 @@ export class PubNub implements PubNubApi {
 		//if (config.) this._config.setCertificatePinner(config.);
 		//if (config.) this._config.setSslSocketFactory(config.);
 		//if (config.) this._config.setHttpLoggingInterceptor(config.);
+	}
+
+	destroy(): void {
+		this._client?.forceDestroy();
 	}
 }
