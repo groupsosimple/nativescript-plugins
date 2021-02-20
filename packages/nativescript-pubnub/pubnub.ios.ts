@@ -42,6 +42,55 @@ function transformToJSON(obj) {
 	return jsonObj;
 }
 
+function convertNSJSONToJson(object) {
+	let jsonData = NSJSONSerialization.dataWithJSONObjectOptionsError(object, NSJSONWritingOptions.PrettyPrinted);
+	let jsonString = NSString.alloc().initWithDataEncoding(jsonData, NSUTF8StringEncoding);
+	return JSON.parse(<any>jsonString);
+}
+
+function convertPNStatusToJson(object) {
+	let json: PNStatusNS;
+	let s = null;
+	switch (object.class()) {
+		case PNSubscribeStatus:
+			s = <PNSubscribeStatus>object;
+			json = {
+				category: s.stringifiedCategory(),
+				statusCode: s.statusCode,
+				uuid: s.uuid,
+				isError: s.error,
+				errorData: s.errorData ? s.errorData.information : null,
+				affectedChannelGroups: convertNSJSONToJson(s.subscribedChannelGroups),
+				affectedChannels: convertNSJSONToJson(s.subscribedChannels),
+				origin: s.origin,
+				authKey: s.authKey,
+				operation: s.stringifiedOperation(),
+				isTlsEnabled: s.TLSEnabled,
+			};
+			break;
+		case PNPublishStatus:
+			s = <PNPublishStatus>object;
+			json = {
+				category: s.stringifiedCategory(),
+				statusCode: s.statusCode,
+				uuid: s.uuid,
+				isError: s.error,
+				errorData: s.errorData ? s.errorData.information : null,
+				affectedChannelGroups: [],
+				affectedChannels: [],
+				origin: s.origin,
+				authKey: s.authKey,
+				operation: s.stringifiedOperation(),
+				isTlsEnabled: s.TLSEnabled,
+			};
+			break;
+		default:
+			json = transformToJSON(object.data);
+			break;
+	}
+	return json;
+}
+
 @NativeClass
 export class PNObjectEventListenerImpl extends NSObject implements PNEventsListener {
 	public static ObjCProtocols = [PNEventsListener];
@@ -76,7 +125,7 @@ export class PNObjectEventListenerImpl extends NSObject implements PNEventsListe
 	}
 
 	clientDidReceiveStatus(client: PubNub, event: any): void {
-		if (this.listener.status) this.listener.status(transformToJSON(event.data));
+		if (this.listener.status) this.listener.status(convertPNStatusToJson(event));
 	}
 }
 
@@ -112,7 +161,7 @@ export class PubNubNS implements PubNubApi {
 	}
 	publish(channel: string, message: Object, responseListener: (status: PNStatusNS) => void): void {
 		this._client?.publishToChannelWithCompletion(message, channel, (status) => {
-			responseListener(transformToJSON(status.data));
+			responseListener(convertPNStatusToJson(status));
 		});
 	}
 	destroy() {}
