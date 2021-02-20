@@ -133,15 +133,15 @@ export interface PNPresence {
 }
 
 export interface PNEventListener {
-	status(event: PNStatus): void;
-	message(event: PNMessage): void;
-	presence(event: PNPresence): void;
-	signal(event): void;
-	uuid(event): void;
-	messageAction(event): void;
-	membership(event): void;
-	channel(event): void;
-	file(event): void;
+	status?(event: PNStatus): void;
+	message?(event: PNMessage): void;
+	presence?(event: PNPresence): void;
+	signal?(event): void;
+	uuid?(event): void;
+	messageAction?(event): void;
+	membership?(event): void;
+	channel?(event): void;
+	file?(event): void;
 }
 
 export interface PubNubApi {
