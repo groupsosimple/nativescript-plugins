@@ -1,7 +1,7 @@
 export * from './common';
-import { PubNubNSApi, PNConfiguration, PNEventListener, PNPublishResponse, PNStatus } from './common';
+import { PubNubNSApi as PubNubApi, PNConfiguration, PNEventListener, PNPublishResponse, PNStatus } from './common';
 
-export declare class PubNubNS implements PubNubNSApi {
+export declare class PubNub implements PubNubApi {
 	constructor(config: PNConfiguration);
 	subscribe(channels: string[], withPresence: boolean): void;
 	subscribeToChannelGroups(groups: string[], withPresence: boolean): void;

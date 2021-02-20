@@ -1,6 +1,6 @@
 import { Component, NgZone } from '@angular/core';
 import { DemoSharedPubNub } from '@demo/shared';
-import { PubNubNS, PNConfiguration, PNEventListener } from '@groupsosimple/nativescript-pubnub';
+import { PubNub, PNConfiguration, PNEventListener } from '@groupsosimple/nativescript-pubnub';
 
 @Component({
 	selector: 'demo-nativescript-pubnub',
@@ -8,13 +8,13 @@ import { PubNubNS, PNConfiguration, PNEventListener } from '@groupsosimple/nativ
 })
 export class PubNubComponent {
 	demoShared: DemoSharedPubNub;
-	pubnub: PubNubNS;
+	pubnub: PubNub;
 	constructor(private _ngZone: NgZone) {}
 
 	ngOnInit() {
 		this.demoShared = new DemoSharedPubNub();
 
-		this.pubnub = new PubNubNS(<PNConfiguration>{ publishKey: 'demo', subscribeKey: 'demo' });
+		this.pubnub = new PubNub(<PNConfiguration>{ publishKey: 'demo', subscribeKey: 'demo' });
 		this.pubnub.addEventListener(<PNEventListener>{
 			status: function (event) {
 				console.log('status: ', event);

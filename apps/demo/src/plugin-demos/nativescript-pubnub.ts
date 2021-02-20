@@ -1,6 +1,6 @@
 import { Observable, EventData, Page } from '@nativescript/core';
 import { DemoSharedPubNub } from '@demo/shared';
-import { PubNubNS, PNConfiguration, PNEventListener } from '@groupsosimple/nativescript-pubnub';
+import { PubNub, PNConfiguration, PNEventListener } from '@groupsosimple/nativescript-pubnub';
 
 export function navigatingTo(args: EventData) {
 	const page = <Page>args.object;
@@ -10,7 +10,7 @@ export function navigatingTo(args: EventData) {
 export class DemoModel extends DemoSharedPubNub {
 	constructor() {
 		super();
-		let pubnub = new PubNubNS(<PNConfiguration>{ publishKey: 'demo', subscribeKey: 'demo' });
+		let pubnub = new PubNub(<PNConfiguration>{ publishKey: 'demo', subscribeKey: 'demo' });
 		pubnub.addEventListener(<PNEventListener>{
 			status: function (event) {
 				console.log(event);

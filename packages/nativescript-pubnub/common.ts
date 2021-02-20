@@ -144,7 +144,7 @@ export interface PNEventListener {
 	file(event): void;
 }
 
-export interface PubNubNSApi {
+export interface PubNubApi {
 	subscribe(channels: string[], withPresence: boolean): void;
 	subscribeToChannelGroups(groups: string[], withPresence: boolean): void;
 	unsubscribe(channels: string[]): void;

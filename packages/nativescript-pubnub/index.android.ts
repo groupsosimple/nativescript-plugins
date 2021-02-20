@@ -1,4 +1,4 @@
-import { PubNubNSApi, PNConfiguration as PNConfigurationNS, PNEventListener as PNEventListenerNS, PNStatus as PNStatusNS } from './common';
+import { PubNubApi, PNConfiguration, PNEventListener, PNStatus } from './common';
 
 function convertPNStatusToJson(pubnub: com.pubnub.api.PubNub, status: com.pubnub.api.models.consumer.PNStatus) {
 	return JSON.parse(
@@ -14,44 +14,44 @@ function convertPNStatusToJson(pubnub: com.pubnub.api.PubNub, status: com.pubnub
 
 @NativeClass
 class SubscribeCallbackImpl extends com.pubnub.api.callbacks.SubscribeCallback {
-	constructor(private eventListener: PNEventListenerNS) {
+	constructor(private eventListener: PNEventListener) {
 		super();
 		return global.__native(this);
 	}
-	public presence(pubnub: com.pubnub.api.PubNub, event: com.pubnub.api.models.consumer.pubsub.PNPresenceEventResult): void {
+	presence(pubnub: com.pubnub.api.PubNub, event: com.pubnub.api.models.consumer.pubsub.PNPresenceEventResult): void {
 		if (this.eventListener.presence) this.eventListener.presence(JSON.parse(pubnub.getMapper().toJson(event)));
 	}
-	public message(pubnub: com.pubnub.api.PubNub, event: com.pubnub.api.models.consumer.pubsub.PNMessageResult): void {
+	message(pubnub: com.pubnub.api.PubNub, event: com.pubnub.api.models.consumer.pubsub.PNMessageResult): void {
 		if (this.eventListener.message) this.eventListener.message(JSON.parse(pubnub.getMapper().toJson(event)));
 	}
-	public status(pubnub: com.pubnub.api.PubNub, event: com.pubnub.api.models.consumer.PNStatus): void {
+	status(pubnub: com.pubnub.api.PubNub, event: com.pubnub.api.models.consumer.PNStatus): void {
 		if (this.eventListener.status) this.eventListener.status(convertPNStatusToJson(pubnub, event));
 	}
-	public signal(pubnub: com.pubnub.api.PubNub, event: com.pubnub.api.models.consumer.pubsub.PNSignalResult): void {
+	signal(pubnub: com.pubnub.api.PubNub, event: com.pubnub.api.models.consumer.pubsub.PNSignalResult): void {
 		if (this.eventListener.signal) this.eventListener.signal(JSON.parse(pubnub.getMapper().toJson(event)));
 	}
-	public uuid(pubnub: com.pubnub.api.PubNub, event: com.pubnub.api.models.consumer.objects_api.uuid.PNUUIDMetadataResult): void {
+	uuid(pubnub: com.pubnub.api.PubNub, event: com.pubnub.api.models.consumer.objects_api.uuid.PNUUIDMetadataResult): void {
 		if (this.eventListener.uuid) this.eventListener.uuid(JSON.parse(pubnub.getMapper().toJson(event)));
 	}
-	public messageAction(pubnub: com.pubnub.api.PubNub, event: com.pubnub.api.models.consumer.pubsub.message_actions.PNMessageActionResult): void {
+	messageAction(pubnub: com.pubnub.api.PubNub, event: com.pubnub.api.models.consumer.pubsub.message_actions.PNMessageActionResult): void {
 		if (this.eventListener.messageAction) this.eventListener.messageAction(JSON.parse(pubnub.getMapper().toJson(event)));
 	}
-	public membership(pubnub: com.pubnub.api.PubNub, event: com.pubnub.api.models.consumer.objects_api.membership.PNMembershipResult): void {
+	membership(pubnub: com.pubnub.api.PubNub, event: com.pubnub.api.models.consumer.objects_api.membership.PNMembershipResult): void {
 		if (this.eventListener.membership) this.eventListener.membership(JSON.parse(pubnub.getMapper().toJson(event)));
 	}
-	public channel(pubnub: com.pubnub.api.PubNub, event: com.pubnub.api.models.consumer.objects_api.channel.PNChannelMetadataResult): void {
+	channel(pubnub: com.pubnub.api.PubNub, event: com.pubnub.api.models.consumer.objects_api.channel.PNChannelMetadataResult): void {
 		if (this.eventListener.channel) this.eventListener.channel(JSON.parse(pubnub.getMapper().toJson(event)));
 	}
-	public file(pubnub: com.pubnub.api.PubNub, event: com.pubnub.api.models.consumer.pubsub.files.PNFileEventResult): void {
+	file(pubnub: com.pubnub.api.PubNub, event: com.pubnub.api.models.consumer.pubsub.files.PNFileEventResult): void {
 		if (this.eventListener.file) this.eventListener.file(JSON.parse(pubnub.getMapper().toJson(event)));
 	}
 }
 
-export class PubNubNS implements PubNubNSApi {
+export class PubNub implements PubNubApi {
 	_config: com.pubnub.api.PNConfiguration;
 	_client: com.pubnub.api.PubNub;
 
-	constructor(config: PNConfigurationNS) {
+	constructor(config: PNConfiguration) {
 		// initialize the native config class
 		this.initializeConfiguration(config);
 
@@ -65,11 +65,11 @@ export class PubNubNS implements PubNubNSApi {
 		subsBuilder_?.execute();
 	}
 
-	addEventListener(eventListener: PNEventListenerNS) {
+	addEventListener(eventListener: PNEventListener) {
 		this._client?.addListener(new SubscribeCallbackImpl(eventListener));
 	}
 
-	publish(channel: string, message: Object, responseListener: (rstatus: PNStatusNS) => void) {
+	publish(channel: string, message: Object, responseListener: (rstatus: PNStatus) => void) {
 		let pubnub = this._client;
 		this._client
 			?.publish()
@@ -98,7 +98,7 @@ export class PubNubNS implements PubNubNSApi {
 		this._client?.unsubscribe().channelGroups(java.util.Arrays.asList(groups)).execute();
 	}
 
-	initializeConfiguration(config: PNConfigurationNS) {
+	initializeConfiguration(config: PNConfiguration) {
 		this._config = new com.pubnub.api.PNConfiguration();
 
 		if (config.uuid) this._config.setUuid(config.uuid);
