@@ -2,7 +2,8 @@
 <StackLayout class="p-20">
 	<ScrollView class="h-full">
 		<StackLayout>
-			<Button text="Test nativescript-pubnub" (tap)="demoShared.testIt()" class="btn btn-primary"></Button>
+			<Button text="Send Message" (tap)="testIt()" class="btn btn-primary"></Button>
+			<Label [text]="messages['received']" textWrap="True"></Label>
 		</StackLayout>
 	</ScrollView>
 </StackLayout>

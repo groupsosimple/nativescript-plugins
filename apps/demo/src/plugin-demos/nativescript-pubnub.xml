@@ -6,8 +6,8 @@
     <StackLayout class="p-20">
         <ScrollView class="h-full">
           <StackLayout>
-            <Button text="Test nativescript-pubnub" tap="{{ testIt }}" class="btn btn-primary"/>
-
+            <Button text="Send Message" tap="{{ testIt }}" class="btn btn-primary"/>
+            <Label text="{{ messages.received }}" textWrap="True"/>
           </StackLayout>
         </ScrollView>
     </StackLayout>

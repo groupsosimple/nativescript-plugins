@@ -1,0 +1,6 @@
+android {
+}
+dependencies {
+    implementation "com.pubnub:pubnub-gson:4.35.0"
+    implementation "org.slf4j:slf4j-android:1.7.30"
+}
