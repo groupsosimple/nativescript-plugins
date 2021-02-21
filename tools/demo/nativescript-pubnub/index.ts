@@ -3,13 +3,14 @@ import { PubNub, PNConfiguration } from '@groupsosimple/nativescript-pubnub';
 import { fromObject } from '@nativescript/core';
 
 export class DemoSharedPubNub extends DemoSharedBase {
-	pubnub = new PubNub(<PNConfiguration>{ publishKey: 'demo', subscribeKey: 'demo' });
+	pubnubConfig = <PNConfiguration>{ publishKey: 'demo', subscribeKey: 'demo' };
 	channel = 'myChannel';
 	messages = fromObject({
 		received: '',
 	});
-	constructor() {
+	constructor(private pubnub: PubNub) {
 		super();
+		this.pubnub.configuration(this.pubnubConfig);
 		this.pubnub.addEventListener({
 			status: (event) => {
 				console.log('Status Event: ', event);

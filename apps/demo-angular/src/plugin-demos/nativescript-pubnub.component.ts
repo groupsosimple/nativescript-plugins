@@ -1,13 +1,14 @@
 import { Component, NgZone } from '@angular/core';
 import { DemoSharedPubNub } from '@demo/shared';
+import { PubNubService } from '@groupsosimple/nativescript-pubnub/angular';
 
 @Component({
 	selector: 'demo-nativescript-pubnub',
 	templateUrl: 'nativescript-pubnub.component.html',
 })
 export class PubNubComponent extends DemoSharedPubNub {
-	constructor(private _ngZone: NgZone) {
-		super();
+	constructor(private _ngZone: NgZone, private pubnubService: PubNubService) {
+		super(pubnubService);
 	}
 
 	ngOnInit() {}

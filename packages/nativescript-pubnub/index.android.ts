@@ -53,12 +53,15 @@ export class PubNub implements PubNubApi {
 	_config: com.pubnub.api.PNConfiguration;
 	_client: com.pubnub.api.PubNub;
 
-	constructor(config: PNConfiguration) {
-		// initialize the native config class
-		this.initializeConfiguration(config);
+	constructor(config?: PNConfiguration) {
+		if (config) this.configuration(config);
+	}
 
-		// create the native client
+	configuration(config: PNConfiguration) {
+		this.destroy();
+		this.initializeConfiguration(config);
 		this._client = new com.pubnub.api.PubNub(this._config);
+		return this;
 	}
 
 	subscribe(channels: string[], withPresence: boolean) {
@@ -144,6 +147,7 @@ export class PubNub implements PubNubApi {
 	}
 
 	destroy(): void {
+		this._client?.unsubscribeAll();
 		this._client?.forceDestroy();
 	}
 }

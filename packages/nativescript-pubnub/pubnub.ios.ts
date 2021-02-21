@@ -30,45 +30,38 @@ function nsObjectTojson(object) {
 	return JSON.parse(<any>jsonString);
 }
 
-function pnStatusToJson(object) {
-	let json: PNStatusNS;
-	let s = null;
-	switch (object.class()) {
+function pnStatusToJson(status: PNStatus) {
+	let json = <PNStatusNS>{
+		category: status.stringifiedCategory(),
+		statusCode: status.statusCode,
+		uuid: status.uuid,
+		isError: status.error,
+		errorData: null,
+		affectedChannelGroups: [],
+		affectedChannels: [],
+		origin: status.origin,
+		authKey: status.authKey,
+		operation: status.stringifiedOperation(),
+		isTlsEnabled: status.TLSEnabled,
+	};
+	switch (status.class()) {
 		case PNSubscribeStatus:
-			s = <PNSubscribeStatus>object;
+			const sub = <PNSubscribeStatus>status;
 			json = {
-				category: s.stringifiedCategory(),
-				statusCode: s.statusCode,
-				uuid: s.uuid,
-				isError: s.error,
-				errorData: s.errorData ? s.errorData.information : null,
-				affectedChannelGroups: nsObjectTojson(s.subscribedChannelGroups),
-				affectedChannels: nsObjectTojson(s.subscribedChannels),
-				origin: s.origin,
-				authKey: s.authKey,
-				operation: s.stringifiedOperation(),
-				isTlsEnabled: s.TLSEnabled,
+				...json,
+				errorData: sub.errorData ? sub.errorData.information : null,
+				affectedChannelGroups: nsObjectTojson(sub.subscribedChannelGroups),
+				affectedChannels: nsObjectTojson(sub.subscribedChannels),
 			};
 			break;
 		case PNPublishStatus:
-			s = <PNPublishStatus>object;
+			const pub = <PNPublishStatus>status;
 			json = {
-				category: s.stringifiedCategory(),
-				statusCode: s.statusCode,
-				uuid: s.uuid,
-				isError: s.error,
-				errorData: s.errorData ? s.errorData.information : null,
-				affectedChannelGroups: [],
-				affectedChannels: [],
-				origin: s.origin,
-				authKey: s.authKey,
-				operation: s.stringifiedOperation(),
-				isTlsEnabled: s.TLSEnabled,
+				...json,
+				errorData: pub.errorData ? pub.errorData.information : null,
 			};
 			break;
 		default:
-			json = nsDataToJson(object.data);
-			break;
 	}
 	return json;
 }
@@ -89,7 +82,12 @@ export class PNObjectEventListenerImpl extends NSObject implements PNEventsListe
 	}
 
 	clientDidReceiveMessage(client: PubNub, event: PNMessageResult): void {
-		if (this.listener.message) this.listener.message(nsDataToJson(event.data));
+		if (this.listener.message)
+			this.listener.message({
+				...nsDataToJson(event.data),
+				publisher: event.data.publisher,
+				subscribedChannel: event.data.subscription,
+			});
 	}
 
 	clientDidReceiveMessageAction(client: PubNub, event: PNMessageActionResult): void {
@@ -115,14 +113,21 @@ export class PubNubNS implements PubNubApi {
 	private _config: PNConfiguration;
 	private _client: PubNub;
 
-	constructor(config: PNConfigurationNS) {
+	constructor(config?: PNConfigurationNS) {
+		if (config) this.configuration(config);
+	}
+
+	configuration(config: PNConfigurationNS) {
+		this.destroy();
 		this._config = PNConfiguration.configurationWithPublishKeySubscribeKey(config.publishKey, config.subscribeKey);
 
 		for (let key of Object.keys(config)) {
 			this._config[key] = config[key];
 		}
 		this._client = PubNub.clientWithConfiguration(this._config);
+		return this;
 	}
+
 	addEventListener(listener: PNEventListenerNS): void {
 		this._client?.addListener(PNObjectEventListenerImpl.init(listener));
 	}
@@ -146,5 +151,7 @@ export class PubNubNS implements PubNubApi {
 			responseListener(pnStatusToJson(status));
 		});
 	}
-	destroy() {}
+	destroy() {
+		this._client?.unsubscribeFromAll();
+	}
 }
