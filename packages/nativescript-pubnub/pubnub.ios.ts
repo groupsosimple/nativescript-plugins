@@ -1,29 +1,11 @@
 // Rename the interfaces to not match with the Objective C PubNub SDK
 import { PubNubApi, PNConfiguration as PNConfigurationNS, PNEventListener as PNEventListenerNS, PNStatus as PNStatusNS } from './common';
 
-function isJsonString(str: string) {
-	try {
-		JSON.parse(str);
-	} catch (e) {
-		return false;
-	}
-	return true;
-}
-
-function isJsonObj(obj: Object) {
-	try {
-		JSON.stringify(obj);
-	} catch (e) {
-		return false;
-	}
-	return true;
-}
-
-function transformToJSON(obj) {
+function nsDataToJson(object) {
 	let jsonObj;
 	try {
 		jsonObj = JSON.parse(
-			obj
+			object
 				.toString()
 				.replace(/["']/g, '')
 				.replace(/([^\s].*) = ([^;{}]*)[;]/gi, '"$1": "$2",')
@@ -36,19 +18,19 @@ function transformToJSON(obj) {
 	} catch (e) {
 		jsonObj = {
 			error: 'An error occurred while converting to JSON',
-			data: obj.toString(),
+			data: object.toString(),
 		};
 	}
 	return jsonObj;
 }
 
-function convertNSJSONToJson(object) {
+function nsObjectTojson(object) {
 	let jsonData = NSJSONSerialization.dataWithJSONObjectOptionsError(object, NSJSONWritingOptions.PrettyPrinted);
 	let jsonString = NSString.alloc().initWithDataEncoding(jsonData, NSUTF8StringEncoding);
 	return JSON.parse(<any>jsonString);
 }
 
-function convertPNStatusToJson(object) {
+function pnStatusToJson(object) {
 	let json: PNStatusNS;
 	let s = null;
 	switch (object.class()) {
@@ -60,8 +42,8 @@ function convertPNStatusToJson(object) {
 				uuid: s.uuid,
 				isError: s.error,
 				errorData: s.errorData ? s.errorData.information : null,
-				affectedChannelGroups: convertNSJSONToJson(s.subscribedChannelGroups),
-				affectedChannels: convertNSJSONToJson(s.subscribedChannels),
+				affectedChannelGroups: nsObjectTojson(s.subscribedChannelGroups),
+				affectedChannels: nsObjectTojson(s.subscribedChannels),
 				origin: s.origin,
 				authKey: s.authKey,
 				operation: s.stringifiedOperation(),
@@ -85,7 +67,7 @@ function convertPNStatusToJson(object) {
 			};
 			break;
 		default:
-			json = transformToJSON(object.data);
+			json = nsDataToJson(object.data);
 			break;
 	}
 	return json;
@@ -103,29 +85,29 @@ export class PNObjectEventListenerImpl extends NSObject implements PNEventsListe
 	}
 
 	clientDidReceiveFileEvent(client: PubNub, event: PNFileEventResult): void {
-		if (this.listener.file) this.listener.file(transformToJSON(event.data));
+		if (this.listener.file) this.listener.file(nsDataToJson(event.data));
 	}
 
 	clientDidReceiveMessage(client: PubNub, event: PNMessageResult): void {
-		if (this.listener.message) this.listener.message(transformToJSON(event.data));
+		if (this.listener.message) this.listener.message(nsDataToJson(event.data));
 	}
 
 	clientDidReceiveMessageAction(client: PubNub, event: PNMessageActionResult): void {
-		if (this.listener.messageAction) this.listener.messageAction(transformToJSON(event.data));
+		if (this.listener.messageAction) this.listener.messageAction(nsDataToJson(event.data));
 	}
 
 	clientDidReceiveObjectEvent(client: PubNub, event: PNObjectEventResult): void {}
 
 	clientDidReceivePresenceEvent(client: PubNub, event: PNPresenceEventResult): void {
-		if (this.listener.presence) this.listener.presence(transformToJSON(event.data));
+		if (this.listener.presence) this.listener.presence(nsDataToJson(event.data));
 	}
 
 	clientDidReceiveSignal(client: PubNub, event: PNSignalResult): void {
-		if (this.listener.signal) this.listener.signal(transformToJSON(event.data));
+		if (this.listener.signal) this.listener.signal(nsDataToJson(event.data));
 	}
 
 	clientDidReceiveStatus(client: PubNub, event: any): void {
-		if (this.listener.status) this.listener.status(convertPNStatusToJson(event));
+		if (this.listener.status) this.listener.status(pnStatusToJson(event));
 	}
 }
 
@@ -161,7 +143,7 @@ export class PubNubNS implements PubNubApi {
 	}
 	publish(channel: string, message: Object, responseListener: (status: PNStatusNS) => void): void {
 		this._client?.publishToChannelWithCompletion(message, channel, (status) => {
-			responseListener(convertPNStatusToJson(status));
+			responseListener(pnStatusToJson(status));
 		});
 	}
 	destroy() {}
