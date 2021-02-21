@@ -111,9 +111,8 @@ export interface PNMessage {
 	channel: string;
 	message: Object;
 	publisher: string;
-	subscription: string;
-	timeToken: number;
-	userMetaData: Object;
+	subscribedChannel: string;
+	timetoken: number;
 }
 
 export interface PNPresence {
@@ -129,7 +128,7 @@ export interface PNPresence {
 	state: Object;
 	channel: string;
 	uuid: string;
-	timeToken: number;
+	timetoken: number;
 }
 
 export interface PNEventListener {
@@ -148,6 +147,7 @@ export interface PNEventListener {
 }
 
 export interface PubNubApi {
+	configuration(config: PNConfiguration): PubNubApi;
 	subscribe(channels: string[], withPresence: boolean): void;
 	subscribeToChannelGroups(groups: string[], withPresence: boolean): void;
 	unsubscribe(channels: string[]): void;
