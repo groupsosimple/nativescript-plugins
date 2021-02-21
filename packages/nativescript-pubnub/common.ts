@@ -137,11 +137,14 @@ export interface PNEventListener {
 	message?(event: PNMessage): void;
 	presence?(event: PNPresence): void;
 	signal?(event): void;
-	uuid?(event): void;
 	messageAction?(event): void;
-	membership?(event): void;
-	channel?(event): void;
 	file?(event): void;
+	/** Android only */
+	uuid?(event): void;
+	/** Android only */
+	membership?(event): void;
+	/** Android only */
+	channel?(event): void;
 }
 
 export interface PubNubApi {

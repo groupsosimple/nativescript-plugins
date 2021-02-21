@@ -1,7 +1,7 @@
 {
 	"name": "@groupsosimple/nativescript-pubnub",
 	"version": "1.0.0",
-	"description": "Add a plugin description",
+	"description": "This is a Nativescript plugin wraper for the PubNub SDK. It has implementations for both Android and iOS SDKs.",
 	"main": "index",
 	"typings": "index.d.ts",
 	"nativescript": {
@@ -12,18 +12,19 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/NativeScript/plugins.git"
+		"url": "https://github.com/groupsosimple/nativescript-plugins.git"
 	},
 	"keywords": [
 		"NativeScript",
 		"JavaScript",
 		"TypeScript",
 		"iOS",
-		"Android"
+		"Android",
+		"PubNub"
 	],
 	"author": {
-		"name": "NativeScript",
-		"email": "oss@nativescript.org"
+		"name": "groupsosimple",
+		"email": "groupsosimple@gmail.com"
 	},
 	"bugs": {
 		"url": "https://github.com/NativeScript/plugins/issues"
