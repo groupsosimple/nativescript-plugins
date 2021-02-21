@@ -16,7 +16,7 @@ export class DemoSharedPubNub extends DemoSharedBase {
 			},
 			message: (event) => {
 				console.log('Message Event: ', event);
-				this.messages['received'] = this.messages['received'] + '\n' + JSON.stringify(event.message);
+				this.addNewMessage(event.message);
 			},
 			presence: (event) => {
 				console.log('Presence Event: ', event);
@@ -30,5 +30,9 @@ export class DemoSharedPubNub extends DemoSharedBase {
 		this.pubnub.publish(this.channel, 'My test message!', (status) => {
 			console.log('Publish Status:', status);
 		});
+	}
+
+	addNewMessage(message) {
+		this.messages['received'] = this.messages['received'] + '\n' + JSON.stringify(message);
 	}
 }
