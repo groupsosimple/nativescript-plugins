@@ -1,6 +1,6 @@
 {
 	"name": "@groupsosimple/nativescript-pubnub",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "This is a Nativescript plugin wraper for the PubNub SDK. It has implementations for both Android and iOS SDKs.",
 	"main": "index",
 	"typings": "index.d.ts",
