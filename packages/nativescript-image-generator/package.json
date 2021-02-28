@@ -1,0 +1,55 @@
+{
+	"name": "@groupsosimple/nativescript-image-generator",
+	"version": "1.0.0",
+	"description": "Nativescript hook that generates platforms images based on a single high resolution image.",
+	"main": "index",
+	"typings": "index.d.ts",
+	"nativescript": {
+		"platforms": {
+			"android": "7.0.1",
+			"ios": "7.2.0"
+		},
+		"hooks": [
+			{
+				"type": "before-prepare",
+				"script": "lib/before-prepare.js",
+				"inject": true
+			}
+		]
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/groupsosimple/nativescript-plugins.git"
+	},
+	"keywords": [
+		"NativeScript",
+		"JavaScript",
+		"TypeScript",
+		"iOS",
+		"Android",
+		"Hook",
+		"Image",
+		"Resources",
+		"Resize",
+		"PNG"
+	],
+	"author": {
+		"name": "groupsosimple",
+		"email": "groupsosimple@gmail.com"
+	},
+	"bugs": {
+		"url": "https://github.com/groupsosimple/nativescript-plugins/issues"
+	},
+	"license": "Apache-2.0",
+	"homepage": "https://github.com/groupsosimple/nativescript-plugins/tree/master/packages/nativescript-image-generator",
+	"readmeFilename": "README.md",
+	"bootstrapper": "@nativescript/plugin-seed",
+	"scripts": {
+		"postinstall": "node postinstall.js",
+		"preuninstall": "node preuninstall.js"
+	},
+	"dependencies": {
+		"sharp": "^0.25.2",
+		"@nativescript/hook": "^2.0.0"
+	}
+}

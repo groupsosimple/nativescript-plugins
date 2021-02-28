@@ -109,7 +109,7 @@ export interface PNStatus {
 
 export interface PNMessage {
 	channel: string;
-	message: Object;
+	message: any;
 	publisher: string;
 	subscribedChannel: string;
 	timetoken: number;

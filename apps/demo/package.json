@@ -6,12 +6,13 @@
 	"dependencies": {
 		"nativescript-theme-core": "file:../../node_modules/nativescript-theme-core",
 		"@nativescript/core": "file:../../node_modules/@nativescript/core",
-		"@groupsosimple/nativescript-pubnub": "file:../../packages/nativescript-pubnub"
+		"@groupsosimple/nativescript-pubnub": "file:../../packages/nativescript-pubnub",
+		"@groupsosimple/nativescript-image-generator": "file:../../packages/nativescript-image-generator"
 	},
 	"devDependencies": {
 		"@nativescript/android": "7.0.1",
-		"@nativescript/ios": "7.1.0",
-		"@nativescript/webpack": "~3.0.0",
+		"@nativescript/ios": "7.2.0",
+		"@nativescript/webpack": "~4.1.0",
 		"typescript": "file:../../node_modules/typescript"
 	}
 }
