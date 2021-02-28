@@ -44,3 +44,7 @@ Thumbs.db
 packages/**/angular/dist
 
 *.mykeys
+
+# images inside App_Resources platforms
+/tools/assets/App_Resources/Android/**/*.png
+/tools/assets/App_Resources/iOS/*.png
