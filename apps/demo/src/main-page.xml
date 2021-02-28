@@ -6,6 +6,7 @@
     <ScrollView class="h-full">
       <StackLayout>
         <Button text="nativescript-pubnub" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
+<Button text="nativescript-image-generator" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
       </StackLayout>
     </ScrollView>
   </StackLayout>

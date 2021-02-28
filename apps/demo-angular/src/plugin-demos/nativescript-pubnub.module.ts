@@ -9,4 +9,4 @@ import { PubNubService } from '@groupsosimple/nativescript-pubnub/angular';
 	schemas: [NO_ERRORS_SCHEMA],
 	providers: [PubNubService],
 })
-export class PubNubModule {}
+export class NativescriptPubNubModule {}

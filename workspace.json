@@ -129,6 +129,47 @@
 					}
 				}
 			}
+		},
+		"nativescript-image-generator": {
+			"projectType": "library",
+			"schematics": {},
+			"root": "packages/nativescript-image-generator",
+			"sourceRoot": "packages/nativescript-image-generator",
+			"architect": {
+				"build": {
+					"builder": "@nrwl/node:package",
+					"options": {
+						"outputPath": "dist/packages/nativescript-image-generator",
+						"tsConfig": "packages/nativescript-image-generator/tsconfig.json",
+						"packageJson": "packages/nativescript-image-generator/package.json",
+						"main": "packages/nativescript-image-generator/index.ts",
+						"assets": [
+							"packages/nativescript-image-generator/*.md",
+							"packages/nativescript-image-generator/index.d.ts",
+							"LICENSE",
+							{
+								"glob": "**/*",
+								"input": "packages/nativescript-image-generator/platforms/",
+								"output": "./platforms/"
+							}
+						]
+					}
+				},
+				"build.all": {
+					"builder": "@nrwl/workspace:run-commands",
+					"options": {
+						"commands": ["nx run nativescript-image-generator:build", "node tools/scripts/build-finish.ts nativescript-image-generator"],
+						"parallel": false
+					}
+				},
+				"focus": {
+					"builder": "@nrwl/workspace:run-commands",
+					"options": {
+						"commands": ["nx g @nativescript/plugin-tools:focus-packages nativescript-image-generator"],
+						"parallel": false
+					}
+				}
+			}
 		}
 	},
 	"cli": {
