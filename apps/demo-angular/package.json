@@ -15,7 +15,8 @@
 		"reflect-metadata": "file:../../node_modules/reflect-metadata",
 		"rxjs": "file:../../node_modules/rxjs",
 		"zone.js": "file:../../node_modules/zone.js",
-		"@groupsosimple/nativescript-pubnub": "file:../../dist/packages/nativescript-pubnub"
+		"@groupsosimple/nativescript-pubnub": "file:../../dist/packages/nativescript-pubnub",
+		"@groupsosimple/nativescript-image-generator": "file:../../dist/packages/nativescript-image-generator"
 	},
 	"devDependencies": {
 		"@angular/compiler-cli": "file:../../node_modules/@angular/compiler-cli",

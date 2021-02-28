@@ -70,6 +70,13 @@ module.exports = {
 					description: '@groupsosimple/nativescript-pubnub: Build',
 				},
 			},
+			// @groupsosimple/nativescript-image-generator
+			'nativescript-image-generator': {
+				build: {
+					script: 'nx run nativescript-image-generator:build.all',
+					description: '@groupsosimple/nativescript-image-generator: Build',
+				},
+			},
 			'build-all': {
 				script: 'nx run all:build',
 				description: 'Build all packages',
@@ -83,6 +90,10 @@ module.exports = {
 			'nativescript-pubnub': {
 				script: 'nx run nativescript-pubnub:focus',
 				description: 'Focus on @groupsosimple/nativescript-pubnub',
+			},
+			'nativescript-image-generator': {
+				script: 'nx run nativescript-image-generator:focus',
+				description: 'Focus on @groupsosimple/nativescript-image-generator',
 			},
 			reset: {
 				script: 'nx run all:focus',

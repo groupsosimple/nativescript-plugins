@@ -25,6 +25,9 @@
 		},
 		"nativescript-pubnub": {
 			"tags": []
+		},
+		"nativescript-image-generator": {
+			"tags": []
 		}
 	},
 	"workspaceLayout": {

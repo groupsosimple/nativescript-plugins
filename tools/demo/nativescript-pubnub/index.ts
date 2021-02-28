@@ -3,8 +3,8 @@ import { PubNub, PNConfiguration } from '@groupsosimple/nativescript-pubnub';
 import { fromObject } from '@nativescript/core';
 
 export class DemoSharedPubNub extends DemoSharedBase {
-	pubnubConfig = <PNConfiguration>{ publishKey: 'demo', subscribeKey: 'demo' };
-	channel = 'myChannel';
+	pubnubConfig = <PNConfiguration>{ publishKey: 'pub-c-90d98513-c938-415d-a030-bd94dce95a9e', subscribeKey: 'sub-c-abc7754a-550d-11eb-bf6e-f20b4949e6d2' };
+	channel = 'tradeja.votesCounting.questId:test';
 	messages = fromObject({
 		received: '',
 	});

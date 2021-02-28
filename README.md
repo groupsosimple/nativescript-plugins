@@ -5,6 +5,7 @@ npm run setup
 npm start
 ```
 
+- @groupsosimple/nativescript-image-generator
 - @groupsosimple/nativescript-pubnub
 
 # How to use?
