@@ -1,6 +1,6 @@
 {
 	"name": "@groupsosimple/nativescript-image-generator",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Nativescript hook that generates platforms images based on a single high resolution image.",
 	"main": "index",
 	"typings": "index.d.ts",
