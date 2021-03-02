@@ -17,6 +17,18 @@ const ANDROID_DRAWABLES_FOLDERS = [
 	{ name: 'drawable-xxxhdpi', scale: 4 },
 ];
 
+function getAndroidBaseName(basename, warning = true) {
+	const newBaseName = basename.toLowerCase().replace(/[^a-z0-9_]/g, '_');
+	if (basename != newBaseName && warning) {
+		console.warn(
+			'\x1b[33m%s\x1b[0m',
+			`[ImageGenerator] WARNING: the file ${basename}.png was renamed to ${newBaseName}.png on Android resources.
+                 Images on android must contain only lowercase a-z, 0-9, or underscore. It is advised to rename this file.`
+		);
+	}
+	return newBaseName;
+}
+
 function isGenerateNeeded(currentImages, cachedImages) {
 	const currentBasenames = currentImages.map((currentImage) => currentImage.basename);
 
@@ -44,7 +56,14 @@ function isGenerateNeeded(currentImages, cachedImages) {
 async function generate(currentImages, cachedImages, appResourcesDir, platform) {
 	const platformResourcesDirectoryPath = getPlatformResourcesDirectoryPath(appResourcesDir, platform);
 	const currentBasenames = currentImages.map((currentImage) => currentImage.basename);
-
+	// Create the drawable android folders in case there is none
+	if (platform == 'android') {
+		try {
+			await Promise.all(ANDROID_DRAWABLES_FOLDERS.map((drawable) => mkdir(path.join(platformResourcesDirectoryPath, drawable.name), { recursive: true })));
+		} catch (e) {
+			throw new Error(`Android drawable folders not created. ${e.message}`);
+		}
+	}
 	// Remove files not present anymore
 	await Promise.all(
 		cachedImages.map((cachedImage) => {
@@ -96,7 +115,8 @@ async function removeImage({ basename }, platformResourcesDirectoryPath, platfor
 		}
 	} else if (platform === 'android') {
 		try {
-			await Promise.all(ANDROID_DRAWABLES_FOLDERS.map((drawable) => unlink(path.join(platformResourcesDirectoryPath, drawable.name, `${basename}.png`))));
+			const androidBaseName = getAndroidBaseName(basename, false);
+			await Promise.all(ANDROID_DRAWABLES_FOLDERS.map((drawable) => unlink(path.join(platformResourcesDirectoryPath, drawable.name, `${androidBaseName}.png`))));
 		} catch {
 			// Nothing to do if files already deleted
 		}
@@ -115,8 +135,9 @@ function getResizedImages({ basename }, platform) {
 			{ path: path.join(folderPath, `${basename}@3x.png`), scale: 3 },
 		];
 	} else if (platform === 'android') {
+		const androidBaseName = getAndroidBaseName(basename);
 		return ANDROID_DRAWABLES_FOLDERS.map((drawable) => ({
-			path: path.join(relativePath, drawable.name, `${basename}.png`),
+			path: path.join(relativePath, drawable.name, `${androidBaseName}.png`),
 			scale: drawable.scale,
 		}));
 	}
@@ -132,7 +153,6 @@ async function createImage({ filepath, basename, scale }, resizedImages, appReso
 
 	// x1 width
 	const width = await getImageWidth(filepath, scale);
-
 	for (const resizedImage of resizedImages) {
 		await resizeImage(filepath, path.join(appResourcesDir, platform === 'ios' ? 'iOS' : 'Android', resizedImage.path), width * resizedImage.scale);
 	}

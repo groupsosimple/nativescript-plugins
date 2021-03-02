@@ -47,4 +47,4 @@ packages/**/angular/dist
 
 # images inside App_Resources platforms
 /tools/assets/App_Resources/Android/**/*.png
-/tools/assets/App_Resources/iOS/*.png
+/tools/assets/App_Resources/iOS/**/*.imageset/*
